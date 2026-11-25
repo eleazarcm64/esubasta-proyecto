@@ -2,24 +2,24 @@ CREATE DATABASE IF NOT EXISTS esubasta;
 USE esubasta;
 
 CREATE TABLE IF NOT EXISTS categorias (
-                                          id_categoria INT PRIMARY KEY AUTO_INCREMENT,
-                                          nombre VARCHAR(100) NOT NULL,
+    id_categoria INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
     descripcion TEXT
     );
 
 CREATE TABLE IF NOT EXISTS usuarios (
-                                        id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-                                        nombre VARCHAR(100) NOT NULL,
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
     tipo VARCHAR(20) NOT NULL
     );
 
 CREATE TABLE IF NOT EXISTS articulos (
-                                         id_articulo INT PRIMARY KEY AUTO_INCREMENT,
-                                         id_vendedor INT NOT NULL,
-                                         id_categoria INT NOT NULL,
-                                         titulo VARCHAR(200) NOT NULL,
+    id_articulo INT PRIMARY KEY AUTO_INCREMENT,
+    id_vendedor INT NOT NULL,
+    id_categoria INT NOT NULL,
+    titulo VARCHAR(200) NOT NULL,
     descripcion TEXT,
     precio_inicial DECIMAL(10,2) NOT NULL,
     precio_actual DECIMAL(10,2) NOT NULL,
@@ -31,75 +31,75 @@ CREATE TABLE IF NOT EXISTS articulos (
     );
 
 CREATE TABLE IF NOT EXISTS imagenes_articulo (
-                                                 id_imagen INT PRIMARY KEY AUTO_INCREMENT,
-                                                 id_articulo INT NOT NULL,
-                                                 url_imagen VARCHAR(255),
+    id_imagen INT PRIMARY KEY AUTO_INCREMENT,
+    id_articulo INT NOT NULL,
+    url_imagen VARCHAR(255),
     FOREIGN KEY (id_articulo) REFERENCES articulos(id_articulo)
     );
 
 CREATE TABLE IF NOT EXISTS pujas (
-                                     id_puja INT PRIMARY KEY AUTO_INCREMENT,
-                                     id_articulo INT NOT NULL,
-                                     id_comprador INT NOT NULL,
-                                     monto DECIMAL(10,2) NOT NULL,
+    id_puja INT PRIMARY KEY AUTO_INCREMENT,
+    id_articulo INT NOT NULL,
+    id_comprador INT NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
     es_ganadora BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_articulo) REFERENCES articulos(id_articulo),
     FOREIGN KEY (id_comprador) REFERENCES usuarios(id_usuario)
     );
 
 CREATE TABLE IF NOT EXISTS favoritos (
-                                         id_favorito INT PRIMARY KEY AUTO_INCREMENT,
-                                         id_usuario INT NOT NULL,
-                                         id_articulo INT NOT NULL,
-                                         FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    id_favorito INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    id_articulo INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_articulo) REFERENCES articulos(id_articulo)
     );
 
 CREATE TABLE IF NOT EXISTS notificaciones (
-                                              id_notificacion INT PRIMARY KEY AUTO_INCREMENT,
-                                              id_usuario INT NOT NULL,
-                                              mensaje TEXT NOT NULL,
-                                              leida BOOLEAN DEFAULT FALSE,
-                                              FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+    id_notificacion INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    mensaje TEXT NOT NULL,
+    leida BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
     );
 
 CREATE TABLE IF NOT EXISTS ventas (
-                                      id_venta INT PRIMARY KEY AUTO_INCREMENT,
-                                      id_articulo INT NOT NULL,
-                                      id_ganador INT NOT NULL,
-                                      monto_final DECIMAL(10,2) NOT NULL,
+    id_venta INT PRIMARY KEY AUTO_INCREMENT,
+    id_articulo INT NOT NULL,
+    id_ganador INT NOT NULL,
+    monto_final DECIMAL(10,2) NOT NULL,
     estado_pago VARCHAR(20) DEFAULT 'pendiente',
     FOREIGN KEY (id_articulo) REFERENCES articulos(id_articulo),
     FOREIGN KEY (id_ganador) REFERENCES usuarios(id_usuario)
     );
 
 CREATE TABLE IF NOT EXISTS pagos (
-                                     id_pago INT PRIMARY KEY AUTO_INCREMENT,
-                                     id_venta INT NOT NULL,
-                                     metodo VARCHAR(50) NOT NULL,
+    id_pago INT PRIMARY KEY AUTO_INCREMENT,
+    id_venta INT NOT NULL,
+    metodo VARCHAR(50) NOT NULL,
     monto DECIMAL(10,2) NOT NULL,
     estado VARCHAR(20) DEFAULT 'pendiente',
     FOREIGN KEY (id_venta) REFERENCES ventas(id_venta)
     );
 
 CREATE TABLE IF NOT EXISTS preguntas (
-                                         id_pregunta INT PRIMARY KEY AUTO_INCREMENT,
-                                         id_articulo INT NOT NULL,
-                                         id_usuario INT NOT NULL,
-                                         pregunta TEXT NOT NULL,
-                                         respuesta TEXT,
-                                         FOREIGN KEY (id_articulo) REFERENCES articulos(id_articulo),
+    id_pregunta INT PRIMARY KEY AUTO_INCREMENT,
+    id_articulo INT NOT NULL,
+    id_usuario INT NOT NULL,
+    pregunta TEXT NOT NULL,
+    respuesta TEXT,
+    FOREIGN KEY (id_articulo) REFERENCES articulos(id_articulo),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
     );
 
 CREATE TABLE IF NOT EXISTS valoraciones (
-                                            id_valoracion INT PRIMARY KEY AUTO_INCREMENT,
-                                            id_venta INT NOT NULL,
-                                            id_usuario_califica INT NOT NULL,
-                                            id_usuario_calificado INT NOT NULL,
-                                            puntaje INT NOT NULL,
-                                            comentario TEXT,
-                                            FOREIGN KEY (id_venta) REFERENCES ventas(id_venta),
+    id_valoracion INT PRIMARY KEY AUTO_INCREMENT,
+    id_venta INT NOT NULL,
+    id_usuario_califica INT NOT NULL,
+    id_usuario_calificado INT NOT NULL,
+    puntaje INT NOT NULL,
+    comentario TEXT,
+    FOREIGN KEY (id_venta) REFERENCES ventas(id_venta),
     FOREIGN KEY (id_usuario_califica) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_usuario_calificado) REFERENCES usuarios(id_usuario)
     );
